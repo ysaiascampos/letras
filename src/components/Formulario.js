@@ -1,10 +1,38 @@
-import React from 'react';
-const Formulario = () => {
+import React, { useState } from 'react';
+const Formulario = ({setBusquedaletra}) => {
+    const [busqueda, setBusqueda] = useState({
+        artista: '',
+        cancion: ''
+    });
+    const [error, setError] = useState(false);
+    const {artista, cancion} = busqueda;
+
+    //funcion a cada input para leer su contenido
+    const actualizarState = e => {
+        setBusqueda({
+            ...busqueda,
+            [e.target.name] : e.target.value
+        });
+    }
+
+    const buscarInformacion = e => {
+        e.preventDefault();
+
+        if(artista.trim() === '' || cancion.trim() === ''){
+            setError(true);
+            return;
+        }
+        setError(false);
+        setBusquedaletra(busqueda);
+    }
     return ( 
         <div className="bg-info">
             <div className="container">
+            { error ? <p className="alert alert-danger text-center p-2">Todos los campos son obligatorios</p>:null}
                 <div className="row">
+                    
                     <form
+                    onSubmit={buscarInformacion}
                     className="col card text-white bg-transparent mb-5 pt-5 tb-2"
                     >
                         <fieldset>
@@ -18,8 +46,10 @@ const Formulario = () => {
                                         <input
                                             type="text"
                                             className="form-control"
-                                            neme="artista"
+                                            name="artista"
                                             placeholder="Nombre Artista"
+                                            onChange={actualizarState}
+                                            value={artista}
                                         />    
                                     </div>
                                 </div>
@@ -29,8 +59,10 @@ const Formulario = () => {
                                         <input
                                             type="text"
                                             className="form-control"
-                                            neme="cancion"
+                                            name="cancion"
                                             placeholder="Nombre Canción"
+                                            onChange={actualizarState}
+                                            value={cancion}
                                         />    
                                     </div>
                                 </div>
